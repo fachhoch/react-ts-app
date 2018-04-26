@@ -30,14 +30,14 @@
         if(AppProperties){
             return AppProperties
         } else{
-            let userTokenIns=<UserToken>{personId:491867,userId:115766,userName:'DT-ACF-GMO-1'}
+            let userTokenIns=<UserToken>{personId:491867,userId:115766,userName:'DT-user1'}
             userTokenIns.is508=true;
             return <IOptions>{
                     userId:123,
                 username:'WKim',
                 axiosBaseUrl:'/',
                 basePath:'/',
-                logoPath:'gs_logo0.svg',
+                logoPath:'logo0.svg',
                 userToken:userTokenIns,
                 surveyUrl:'',
                 loadUser:false
