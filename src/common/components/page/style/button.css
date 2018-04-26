@@ -1,0 +1,49 @@
+.btn {
+    margin: 10px 5px;
+    border-radius: 3px;
+}
+
+.btn .fa {
+    font-size: 1em;
+}
+
+.btn-primary {
+    color: #045aac;
+    font-weight: 600;
+    background-color: #fff;
+    border: 2px solid #045aac;
+    text-transform: uppercase;
+}
+.btn-warning{
+    color: #045aac;
+    font-weight: 600;
+    background-color: #f0ad4e;
+    border: 2px solid #eea236;
+    text-transform: uppercase;
+}
+
+
+.btn-secondary {
+    margin: 10px 20px 0 0;
+    padding: 7px 10px;
+    border: 2px solid #ccc;
+    text-transform: initial;
+}
+.btn-xs {
+    font-size: 11px;
+}
+.btn-link {
+    border: none !important;
+    background-color: transparent !important;
+}
+
+
+
+/* :::::::::::::::::::::::::
+        Print Styles
+   ::::::::::::::::::::::::: */
+@media print {
+    button {
+        display: none !important;
+    }
+}

@@ -1,0 +1,36 @@
+.pagination-ui .pagination {
+    margin: 0px;
+}
+
+.pagination .fa-angle-double-left:before {
+  content: "«";
+}
+.pagination .fa-angle-left:before {
+  content: "⟨";
+}
+.pagination .fa-angle-right:before {
+  content: "⟩";
+}
+.pagination .fa-angle-double-right:before {
+  content: "»";
+}
+.pagination>.active>a {
+    background-color:#286090;
+}
+.pagination>.active>a, .pagination>.active>span, .pagination>.active>a:hover, .pagination>.active>span:hover, .pagination>.active>a:focus, .pagination>.active>span:focus{
+    background-color:#286090;
+    border-color:#286090;
+}
+.paging-text{
+    font-size: 12px;
+    font-weight: inherit;
+}
+/*
+.pagination>li>a, .pagination>li>span{
+    border-color: #286090;
+}
+
+.pagination>.disabled>span, .pagination>.disabled>span:hover, .pagination>.disabled>span:focus, .pagination>.disabled>a, .pagination>.disabled>a:hover, .pagination>.disabled>a:focus {
+    border-color: #286090;
+}
+*/

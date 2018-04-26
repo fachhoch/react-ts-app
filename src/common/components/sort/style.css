@@ -1,0 +1,42 @@
+/*.column-sort-down{
+    display: block;
+}
+.column-sort-no{
+    display: block;
+}
+
+.column-sort-up{
+    display: block;
+}*/
+.column-sort-down::after {
+    position: relative;
+    padding-left: 2px;
+    color: #d4d4d4;
+    font-family: 'FontAwesome';
+    content:"\f0dd";
+    float: right;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.column-sort-up::after {
+    position: relative;
+    padding-left: 2px;
+    color: #d4d4d4;
+    font-family: 'FontAwesome';
+    content:"\f0de";
+    float: right;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.column-sort-no::after{
+    position: relative;
+    padding-left: 2px;
+    color: #d4d4d4;
+    font-family: 'FontAwesome';
+    content:"\f0dc";
+    float: right;
+    font-size: 13px;
+    text-decoration: none;
+}

@@ -1,0 +1,67 @@
+.docs .modal-dialog { /* Width */
+    max-width: 100%;
+    width: auto !important;
+    display: inline-block;
+    max-height: 90%;
+    overflow-y: auto;
+}
+.docs .modal-title{
+    text-align: left;
+}
+.in{
+    text-align: center;
+}
+
+
+h3.page-title {
+    /*margin-bottom: 30px;*/
+    margin-top: 0;
+    padding-top: 25px;
+    color: #063D6F;
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+.appTitle{
+    top: 50%;
+    transform: translateY(-50%);
+    vertical-align: baseline;
+    color: #063D6F;
+    font-size: 30px;
+    font-weight:lighter;
+}
+label  {
+    color: rgba(0, 24, 69, 0.84);
+    font-weight: 600;
+}
+
+/*.pageTitle{
+    textTransform: uppercase;
+    color:#063D6F;
+    margin:1px;
+    font-weight: 600;
+}*/
+/*=========================
+        Media Queries
+ ==========================*/
+
+@media (max-width: 480px) {
+    h3.page-title {
+
+    }
+}
+
+/* :::::::::::::::::::::::::
+        Print Styles
+   ::::::::::::::::::::::::: */
+@media print {
+    h3.page-title {
+        margin-bottom: 0;
+        margin-left: 15px;
+        padding-top: 5px;
+    }
+}
+
+body{
+    font-family: Open Sans,sans-serif;
+}
