@@ -181,7 +181,7 @@ export class  AppCntrl extends AbstractComponentController<AppCntrl>{
     searchItem:string
     activeTab:number=0;
     rc:React.Component<any,any>
-    delTabIndex:number;
+    delTabIndex:number=-1;
     searchClickHandler(){
         let searchReq= new SearchReq();
         searchReq.searchType=SearchType.QUERY;
