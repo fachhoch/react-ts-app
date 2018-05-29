@@ -4,15 +4,14 @@ import {IVideoResponse} from "../appService";
 import {AbstractComponent} from "../common/components/page/ComponentUi";
 import {AppCntrl} from "../appService";
 import  *  as RB from 'react-bootstrap'
-import {IdHeler, IdHelper} from "../common/util/Utils";
+import {IdHeler, IdHelper, WindowDimensions} from "../common/util/Utils";
 import {SearchResCntrl} from "../appService";
 import {VideoCntrl} from "../appService";
-
+import {FamilyVideoCntrl} from "../appService";
 
 
 
 export class AppUi  extends   AbstractComponent<AppCntrl>{
-
     constructor(props){
         super(props);
         this.onChangeSearchText=this.onChangeSearchText.bind(this)
@@ -21,6 +20,12 @@ export class AppUi  extends   AbstractComponent<AppCntrl>{
         this.cntrl().searchItem=e.target.value;
         this.repaintProps();
 
+    }
+    componentDidMount(){
+        this.cntrl().rc=this;
+    }
+    componentWillUnmount(){
+        this.cntrl().rc=null;
     }
 
     searchUi(){
@@ -66,19 +71,56 @@ export class AppUi  extends   AbstractComponent<AppCntrl>{
         let ci=this;
         let cntrl=this.cntrl();
         let tabFac=(item:SearchResCntrl, index)=>{
-         return    <RB.Tab key={index}  eventKey={index}  title={item.searchItem} >
+         return    <RB.Tab.Pane key={index}  eventKey={index}  >
                     <SearchResUi cntrl={item}/>
 
-         </RB.Tab>
+         </RB.Tab.Pane>
         }
-        return  cntrl.searchResCntrls.length!==0?  <div className="row form-group"><div className="col-lg-12"> <RB.Tabs activeKey={cntrl.activeTab}  onSelect={(key)=>{
-            cntrl.activeTab=key;
-            ci.repaintProps();
-        }} id={IdHelper.createId("tabs")}>
-            {cntrl.searchResCntrls.map((item, index)=>{
-                return  tabFac(item,index);
-            })}
-            </RB.Tabs></div></div>:<div className="row"></div>
+        let tabNavItem=(item:SearchResCntrl, index)=>{
+            return <RB.NavItem key={index} eventKey={index}>
+                <span>
+                    <span >{item.searchReq.searchDisplay}</span>
+                    <span style={{paddingLeft:'15px', marginRight:'-5px'}} >
+                        <a href="#" onClick={()=>{
+                            event.preventDefault();
+                            cntrl.delTabIndex=index;
+                        }}>
+                            <i className="fa fa-close"></i>
+                        </a>
+                    </span>
+                </span>
+            </RB.NavItem>
+        }
+        return  cntrl.searchResCntrls.length!==0?  <div className="row form-group"><div className="col-lg-12">
+                <RB.Tab.Container
+                    activeKey={cntrl.activeTab}
+                    onSelect={(key)=>{
+                        if(cntrl.delTabIndex!==-1){
+                           cntrl.closeTab();
+                        }else{
+                            cntrl.activeTab=Number(key);
+                        }
+                         ci.repaintProps();
+                    }}
+                    id={IdHelper.createId("tabs")}>
+                    <RB.Row className="clearfix">
+                        <RB.Col sm={12} key={1}>
+                                <RB.Nav bsStyle="tabs">
+                                    {cntrl.searchResCntrls.map((item, index)=>{
+                                        return  tabNavItem(item,index);
+                                    })}
+                                </RB.Nav>
+                        </RB.Col>
+                        <RB.Col sm={12} key={2}>
+                                    <RB.Tab.Content animation>
+                                    {cntrl.searchResCntrls.map((item, index)=>{
+                                        return  tabFac(item,index);
+                                    })}
+                                    </RB.Tab.Content>
+                        </RB.Col>
+                    </RB.Row>
+                </RB.Tab.Container>
+            </div></div>:<div className="row"></div>
     }
 
     content(){
@@ -96,10 +138,14 @@ export class SearchResUi   extends   AbstractComponent<SearchResCntrl>{
     componentDidMount(){
         let ci=this;
         let cntrl=ci.cntrl();
+        cntrl.rc=this;
         cntrl.doSearch().then(()=>{
             cntrl.stateReady=true;
             ci.repaintProps();
         })
+    }
+    componentWillUnmount(){
+        this.cntrl().rc=null;
     }
 
 
@@ -107,8 +153,8 @@ export class SearchResUi   extends   AbstractComponent<SearchResCntrl>{
         let cntrl=this.cntrl();
        return cntrl.results.length>0? <div className="row">
             <div className="col-lg-12">
-                {cntrl.results.map((item: VideoCntrl) => {
-                    return  <Video cntrl={item}/>
+                {cntrl.results.map((item: VideoCntrl, index) => {
+                    return  <Video cntrl={item} key={index} />
                 })
                 }
             </div>
@@ -125,7 +171,78 @@ export class SearchResUi   extends   AbstractComponent<SearchResCntrl>{
 }
 
 
+class FamilyVideos  extends  AbstractComponent<FamilyVideoCntrl>{
+
+
+    tabsContent(){
+        let ci=this;
+        let cntrl=this.cntrl();
+        let tabFac=(item:SearchResCntrl, index)=>{
+            return    <RB.Tab.Pane key={index}  eventKey={index}  >
+                <SearchResUi cntrl={item}/>
+
+            </RB.Tab.Pane>
+        }
+        let tabNavItem=(item:SearchResCntrl, index)=>{
+            return <RB.NavItem key={index} eventKey={index}>
+                <span>
+                    <span >{item.searchReq.searchDisplay}</span>
+                    <span style={{paddingLeft:'15px', marginRight:'-5px'}} >
+                        <a href="#" onClick={()=>{
+                            event.preventDefault();
+                            cntrl.delTabIndex=index;
+                        }}>
+                            <i className="fa fa-close"></i>
+                        </a>
+                    </span>
+                </span>
+            </RB.NavItem>
+        }
+        return  cntrl.searchResCntrls.length!==0?  <div className="row form-group"><div className="col-lg-12">
+                <RB.Tab.Container
+                    activeKey={cntrl.activeTab}
+                    onSelect={(key)=>{
+                        if(cntrl.delTabIndex!==-1){
+                           cntrl.closeTab();
+                        }else{
+                            cntrl.activeTab=Number(key);
+                        }
+                         ci.repaintProps();
+                    }}
+                    id={IdHelper.createId("tabs")}>
+                    <RB.Row className="clearfix">
+                        <RB.Col sm={12} key={1}>
+                            <RB.Nav bsStyle="tabs">
+                                {cntrl.searchResCntrls.map((item, index)=>{
+                                    return  tabNavItem(item,index);
+                                })}
+                            </RB.Nav>
+                        </RB.Col>
+                        <RB.Col sm={12} key={2}>
+                            <RB.Tab.Content animation>
+                                {cntrl.searchResCntrls.map((item, index)=>{
+                                    return  tabFac(item,index);
+                                })}
+                            </RB.Tab.Content>
+                        </RB.Col>
+                    </RB.Row>
+                </RB.Tab.Container>
+            </div></div>:<div className="row"></div>
+    }
+
+    content(){
+        return this.tabsContent();
+    }
+}
+
 export  class Video extends AbstractComponent<VideoCntrl>{
+
+    componentWillUnmount(){
+        this.cntrl().rc=null;
+    }
+    componentWillMount(){
+        this.cntrl().rc=this;
+    }
 
     imageUi(){
         let cntrl=this.cntrl();
@@ -148,6 +265,31 @@ export  class Video extends AbstractComponent<VideoCntrl>{
         }} > <RB.OverlayTrigger placement="left" overlay={playTt}><i className="fa fa-play"></i></RB.OverlayTrigger></a></div>)
         return  <div className="row">  {items}</div>
     }
+    searchBarUi(){
+        let ci=this;
+        let cntrl=this.cntrl();
+        console.log(" cntrl.channelVideosOpen() "+cntrl.channelVideosOpen())
+        let disableChannel=cntrl.channelVideosOpen();
+
+        let disableRelated=cntrl.realtedVideosOpen();
+        return <div className="row">
+                <div className="col-lg-12">
+                    <ul className="list-inline">
+                        <li key={1} ><button  disabled={disableChannel} className="btn btn-default" onClick={()=>{
+                            cntrl.searchChannelHandler()
+                            //ci.showAlert("Added new tab for this channel","New tab");
+                            ci.repaintProps();
+                        }} >Channel <i className="fa fa-search"></i></button></li>
+                        <li key={2}><button  disabled={disableRelated} className="btn btn-default" onClick={()=>{
+                            cntrl.searchRelatedVideo()
+                             ci.repaintProps();
+                            //ci.showAlert("Added new tab for this channel","New tab");
+                        }} >Realted <i className="fa fa-search"></i></button></li>
+                        <li key={3}><button className="btn btn-default">User Videos <i className="fa fa-search"></i></button></li>
+                    </ul>
+                </div>
+        </div>
+    }
     iframUi(){
         let cntrl=this.cntrl();
         let vr:IVideoResponse=this.cntrl().vd
@@ -155,6 +297,7 @@ export  class Video extends AbstractComponent<VideoCntrl>{
         let closeTt=(<RB.Tooltip id="tooltip">
             <strong>Close Video</strong>
         </RB.Tooltip>)
+        let wd=WindowDimensions.byPercent(40);
 
        return  <div className="row">
             <div className="col-lg-12">
@@ -166,7 +309,7 @@ export  class Video extends AbstractComponent<VideoCntrl>{
                 <div className="row">
                     <div className="col-lg-12">
                         <span >
-                            <iframe id="player" type="text/html" width="640" height="390"
+                            <iframe id="player" type="text/html" width={wd.width} height={wd.height}
                                     src={`http://www.youtube.com/embed/${vr.id.videoId}?enablejsapi=1&origin=http://example.com&autoplay=1`}
                                     frameBorder="0"></iframe>
                         </span>
@@ -185,6 +328,14 @@ export  class Video extends AbstractComponent<VideoCntrl>{
             </div>
         </div>
     }
+    otherVideosUi(){
+        let cntrl=this.cntrl();
+        return cntrl.familyVideoCntrl.searchResCntrls.length!==0? <div className="row">
+                <div className="col-lg-12">
+                    <FamilyVideos cntrl={cntrl.familyVideoCntrl}/>
+                </div>
+            </div>:<div className="row"></div>
+    }
     content(){
         let vr:IVideoResponse=this.cntrl().vd
         let ci=this;
@@ -195,7 +346,9 @@ export  class Video extends AbstractComponent<VideoCntrl>{
                             <div>{vr.snippet.title} </div>
                         </div>
                         <div className="panel-body">
+                                {/*ci.searchBarUi()*/}
                                 {ci.cntrl().showVideoIframe? ci.iframUi():ci.imageUi()}
+                                {ci.otherVideosUi()}
                         </div>
                     </div>
                </div>
@@ -203,4 +356,6 @@ export  class Video extends AbstractComponent<VideoCntrl>{
     }
 
  }
+
+
 

@@ -53,6 +53,18 @@
             wd.height=jquery(window).height();
             return wd;
         }
+        static byPercent(percent:number):WindowDimensions{
+            let wd= new WindowDimensions();
+            wd.width=jquery(window).width();
+            wd.height=jquery(window).height();
+            wd.toPercent(percent);
+            return wd;
+        }
+
+        toPercent(percent:number){
+            this.width=(this.width*percent)/100;
+            this.height=(this.height*percent)/100;
+        }
 
     }
     export let  windowHeightByPercent=(percent:number)=>{
